@@ -2,7 +2,7 @@
 
 Botón capacitivo sin contacto mecánico para abrir la puerta de un citófono Hikvision (entrada *Exit Button* / *Request to Exit*). Está pensado para adultos mayores y personas con movilidad reducida.
 
-![Render 3D de la PCB](images/pcb-3d.png)
+![Render 3D de la PCB](pcb-3d.png)
 
 ## Cómo funciona
 
