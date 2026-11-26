@@ -1,0 +1,172 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="oGlRjDQKEYV_FpQmX8DS">
+    <mxGraphModel dx="2039" dy="1050" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="light-dark(#ECECFF,#FFFFFF)" math="0" shadow="0">
+      <root>
+        <mxCell id="sY_H-341GHbi_tUOXsYd-0" />
+        <mxCell id="sY_H-341GHbi_tUOXsYd-1" parent="sY_H-341GHbi_tUOXsYd-0" />
+        <UserObject label="" mermaidData="{&#10;  &quot;data&quot;: &quot;%%{init: {\n  \&quot;theme\&quot;: \&quot;default\&quot;,\n  \&quot;themeVariables\&quot;: {\n    \&quot;darkMode\&quot;: false,\n    \&quot;background\&quot;: \&quot;#ffffff\&quot;,\n    \&quot;lineColor\&quot;: \&quot;#0f172a\&quot;,\n    \&quot;arrowColor\&quot;: \&quot;#0f172a\&quot;,\n    \&quot;fontFamily\&quot;: \&quot;arial\&quot;\n  }\n}}%%\ngraph LR\n    %% Componentes externos independientes (sin recuadros)\n    Batt[\&quot;Batería Li-Po 1S 3.7 V &lt;br/&gt;+ TP4056 / DW01 (protección)\&quot;] --&gt; LDO[\&quot;LDO RT9080-33 (Iq 2 µA) &lt;br/&gt;Cin 1 µF / Cout 10 µF\&quot;]\n    Sensor[\&quot;Sensor Capacitivo TTP223 &lt;br/&gt;(modo rápido, LED del módulo retirado)\&quot;]\n    Batt --&gt; Div[\&quot;Divisor 2× 1 MΩ &lt;br/&gt;+ 100 nF (VBAT/2)\&quot;]\n    LDO --&gt;|3.3 V| Sensor\n    \n    Opto[\&quot;Optoacoplador PC817 &lt;br/&gt;(Aislamiento Galvánico ≥ 5 kV)\&quot;] --&gt;|C → BTN/RTE · E → GND/COM + TVS| Citofono[\&quot;Citófono Hikvision &lt;br/&gt;(Entrada RTE / Botón de salida)\&quot;]\n    LED[\&quot;LED Indicador rojo &lt;br/&gt;(Retroalimentación Visual)\&quot;]\n\n    %% Único contenedor con recuadro: El Microcontrolador ESP32-C3 y sus pines\n    subgraph MCU [\&quot;ESP32-C3-WROOM-02 (módulo) - Microcontrolador Central\&quot;]\n        direction TB\n        subgraph InPins [\&quot;Pines de Entrada / Alimentación\&quot;]\n            direction TB\n            P_VCC[\&quot;3V3 / GND &lt;br/&gt;(10 µF + 100 nF)\&quot;]\n            P_GPIO3[\&quot;GPIO 3 (ADC1_CH3) &lt;br/&gt;Telemetría Batería\&quot;]\n            P_GPIO0[\&quot;GPIO 0 (Deep-sleep GPIO Wake-up) &lt;br/&gt;Entrada Proximidad\&quot;]\n        end\n\n        subgraph OutPins [\&quot;Pines de Salida / Control\&quot;]\n            direction TB\n            P_GPIO1[\&quot;GPIO 1 &lt;br/&gt;(Control Opto / RTE) &lt;br/&gt;Pull-down 100 kΩ\&quot;]\n            P_GPIO2[\&quot;GPIO 4 &lt;br/&gt;(PWM LED Indicador)\&quot;]\n        end\n    end\n\n    %% Conexiones hacia/desde el Microcontrolador\n    LDO ==&gt;|3.3 V regulada| P_VCC\n    Div --&gt;|VBAT/2 ≤ 2.1 V| P_GPIO3\n    Sensor --&gt;|OUT activo alto &lt;br/&gt;Wake-up + validación 50 ms| P_GPIO0\n\n    P_GPIO1 --&gt;|220 Ω, IF ≈ 9.5 mA| Opto\n    P_GPIO2 --&gt;|330 Ω, ≈ 3.9 mA| LED\n\n    %% Estilos limpios y forzados para evitar fondos negros en draw.io\n    style MCU fill:#f8fafc,stroke:#2563eb,stroke-width:2.5px,color:#0f172a;\n    style InPins fill:#ffffff,stroke:#cbd5e1,stroke-width:1.5px,color:#0f172a;\n    style OutPins fill:#ffffff,stroke:#cbd5e1,stroke-width:1.5px,color:#0f172a;\n\n    classDef pinBox fill:#38bdf8,stroke:#0284c7,stroke-width:2px,color:#ffffff;\n    classDef power fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff;\n    classDef sensor fill:#0d9488,stroke:#0f766e,stroke-width:2px,color:#ffffff;\n    classDef opto fill:#7c3aed,stroke:#6d28d9,stroke-width:2px,color:#ffffff;\n    classDef ext fill:#e11d48,stroke:#be123c,stroke-width:2px,color:#ffffff;\n    classDef led fill:#ca8a04,stroke:#a16207,stroke-width:2px,color:#ffffff;\n    classDef passive fill:#475569,stroke:#334155,stroke-width:2px,color:#ffffff;\n\n    class P_VCC,P_GPIO3,P_GPIO0,P_GPIO1,P_GPIO2 pinBox;\n    class Batt,LDO power;\n    class Sensor sensor;\n    class Opto opto;\n    class Citofono ext;\n    class LED led;\n    class Div passive;&quot;,&#10;  &quot;config&quot;: null,&#10;  &quot;version&quot;: &quot;12&quot;&#10;}" id="3--UwDYoeb955-La7nmg-143">
+          <mxCell connectable="0" parent="sY_H-341GHbi_tUOXsYd-1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="ESP32-C3-WROOM-02 (módulo) - Microcontrolador Central" mermaidId="n:MCU" mermaidBaseStyle="html=1;whiteSpace=nowrap;strokeWidth=2.5;verticalAlign=top;fillColor=#f8fafc;strokeColor=#2563eb;fontColor=#0f172a;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="ESP32-C3-WROOM-02 (módulo) - Microcontrolador Central" id="3--UwDYoeb955-La7nmg-144">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=nowrap;strokeWidth=2.5;verticalAlign=top;fillColor=light-dark(#F8FAFC,#B266FF);strokeColor=light-dark(#2563EB,#1A1A1A);fontColor=light-dark(#0F172A,#1A1A1A);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" vertex="1">
+            <mxGeometry height="906" width="299" x="700" y="140" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Pines de Salida / Control" mermaidId="n:OutPins" mermaidBaseStyle="html=1;whiteSpace=nowrap;strokeWidth=1.5;verticalAlign=top;fillColor=default;strokeColor=#cbd5e1;fontColor=#0f172a;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Pines de Salida / Control" id="3--UwDYoeb955-La7nmg-145">
+          <mxCell parent="3--UwDYoeb955-La7nmg-144" style="html=1;whiteSpace=nowrap;strokeWidth=1.5;verticalAlign=top;fillColor=light-dark(#FFFFFF,#CC99FF);strokeColor=#cbd5e1;fontColor=light-dark(#0F172A,#1A1A1A);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" vertex="1">
+            <mxGeometry height="318" width="200" x="49.5" y="51" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="GPIO 1&#10;(Control Opto / RTE)&#10;Pull-down 100 kΩ" mermaidId="n:P_GPIO1" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#38bdf8;strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="GPIO 1&#10;(Control Opto / RTE)&#10;Pull-down 100 kΩ" id="3--UwDYoeb955-La7nmg-146">
+          <mxCell parent="3--UwDYoeb955-La7nmg-145" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#38BDF8,#66B2FF);strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="97" width="152" x="24" y="51" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="GPIO 4&#10;(PWM LED Indicador)" mermaidId="n:P_GPIO2" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#38bdf8;strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="GPIO 4&#10;(PWM LED Indicador)" id="3--UwDYoeb955-La7nmg-147">
+          <mxCell parent="3--UwDYoeb955-La7nmg-145" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#38BDF8,#66B2FF);strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="97" width="152" x="24" y="198" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Pines de Entrada / Alimentación" mermaidId="n:InPins" mermaidBaseStyle="html=1;whiteSpace=nowrap;strokeWidth=1.5;verticalAlign=top;fillColor=default;strokeColor=#cbd5e1;fontColor=#0f172a;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Pines de Entrada / Alimentación" id="3--UwDYoeb955-La7nmg-148">
+          <mxCell parent="3--UwDYoeb955-La7nmg-144" style="html=1;whiteSpace=nowrap;strokeWidth=1.5;verticalAlign=top;fillColor=light-dark(#FFFFFF,#CC99FF);strokeColor=#cbd5e1;fontColor=light-dark(#0F172A,#1A1A1A);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" vertex="1">
+            <mxGeometry height="463" width="241" x="34" y="419" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="3V3 / GND&#10;(10 µF + 100 nF)" mermaidId="n:P_VCC" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#38bdf8;strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="3V3 / GND&#10;(10 µF + 100 nF)" id="3--UwDYoeb955-La7nmg-149">
+          <mxCell parent="3--UwDYoeb955-La7nmg-148" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#38BDF8,#66B2FF);strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="72" width="152" x="44.5" y="51" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="GPIO 3 (ADC1_CH3)&#10;Telemetría Batería" mermaidId="n:P_GPIO3" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#38bdf8;strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="GPIO 3 (ADC1_CH3)&#10;Telemetría Batería" id="3--UwDYoeb955-La7nmg-150">
+          <mxCell parent="3--UwDYoeb955-La7nmg-148" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#38BDF8,#66B2FF);strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="97" width="152" x="44.5" y="343" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="GPIO 0 (Deep-sleep&#10;GPIO Wake-up)&#10;Entrada Proximidad" mermaidId="n:P_GPIO0" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#38bdf8;strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="GPIO 0 (Deep-sleep&#10;GPIO Wake-up)&#10;Entrada Proximidad" id="3--UwDYoeb955-La7nmg-151">
+          <mxCell parent="3--UwDYoeb955-La7nmg-148" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#38BDF8,#66B2FF);strokeColor=#0284c7;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="120" width="152" x="44.5" y="173" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Batería Li-Po 1S&#10;3.7 V + TP4056&#10;/ DW01" mermaidId="n:Batt" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#d97706;strokeColor=#b45309;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Batería Li-Po 1S&#10;3.7 V + TP4056&#10;/ DW01" id="3--UwDYoeb955-La7nmg-152">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#D97706,#FF99CC);strokeColor=light-dark(#B45309,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="120" width="152" x="30" y="731" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="LDO RT9080-33&#10;(Iq 2 µA)&#10;Cin 1 µF / Cout 10 µF" mermaidId="n:LDO" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#d97706;strokeColor=#b45309;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="LDO RT9080-33&#10;(Iq 2 µA)&#10;Cin 1 µF / Cout 10 µF" id="3--UwDYoeb955-La7nmg-153">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#D97706,#FF99CC);strokeColor=light-dark(#B45309,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="120" width="152" x="222" y="593" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Sensor Capacitivo TTP223&#10;(modo rápido, LED del módulo retirado)" mermaidId="n:Sensor" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#0d9488;strokeColor=#0f766e;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Sensor Capacitivo TTP223&#10;(modo rápido, LED del módulo retirado)" id="3--UwDYoeb955-La7nmg-154">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#0D9488,#FF99CC);strokeColor=light-dark(#0F766E,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="110" width="152" x="222" y="748" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Divisor 2× 1 MΩ&#10;+ 100 nF (VBAT/2)" mermaidId="n:Div" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#475569;strokeColor=#334155;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Divisor 2× 1 MΩ&#10;+ 100 nF (VBAT/2)" id="3--UwDYoeb955-La7nmg-155">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#475569,#FF99CC);strokeColor=light-dark(#334155,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" vertex="1">
+            <mxGeometry height="72" width="152" x="222" y="907" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Optoacoplador PC817&#10;(Aislamiento Galvánico ≥ 5 kV)" mermaidId="n:Opto" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#7c3aed;strokeColor=#6d28d9;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Optoacoplador PC817&#10;(Aislamiento Galvánico ≥ 5 kV)" id="3--UwDYoeb955-La7nmg-156">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#7C3AED,#3399FF);strokeColor=light-dark(#6D28D9,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="120" width="152" x="1208" y="239" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Citófono Hikvision&#10;(Entrada RTE / Botón de salida)" mermaidId="n:Citofono" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#e11d48;strokeColor=#be123c;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Citófono Hikvision&#10;(Entrada RTE / Botón de salida)" id="3--UwDYoeb955-La7nmg-157">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#E11D48,#3399FF);strokeColor=light-dark(#BE123C,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="120" width="152" x="1580" y="239" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="LED Indicador rojo&#10;(Retroalimentación Visual)" mermaidId="n:LED" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ca8a04;strokeColor=#a16207;fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="LED Indicador rojo&#10;(Retroalimentación Visual)" id="3--UwDYoeb955-La7nmg-158">
+          <mxCell parent="3--UwDYoeb955-La7nmg-143" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#CA8A04,#3399FF);strokeColor=light-dark(#A16207,#1A1A1A);fontColor=#ffffff;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;" vertex="1">
+            <mxGeometry height="97" width="152" x="1208" y="399" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:Batt-&gt;LDO#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;exitX=1;exitY=0.36;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="" id="3--UwDYoeb955-La7nmg-159">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-152" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);exitX=1;exitY=0.36;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" target="3--UwDYoeb955-La7nmg-153">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="202" y="774" />
+                <mxPoint x="202" y="653" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" mermaidId="e:Batt-&gt;Div#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;exitX=1;exitY=0.64;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="" id="3--UwDYoeb955-La7nmg-160">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-152" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;exitX=1;exitY=0.64;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" target="3--UwDYoeb955-La7nmg-155">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="202" y="807" />
+                <mxPoint x="202" y="943" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="C → BTN/RTE · E → GND/COM&#10;+ TVS" mermaidId="e:Opto-&gt;Citofono#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="C → BTN/RTE · E → GND/COM&#10;+ TVS" id="3--UwDYoeb955-La7nmg-161">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-156" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" target="3--UwDYoeb955-La7nmg-157">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="3.3 V regulada" mermaidId="e:LDO-&gt;P_VCC#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=7;strokeWidth=3.5;endSize=3;startSize=3;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;" mermaidBaseValue="3.3 V regulada" id="3--UwDYoeb955-La7nmg-162">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-153" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=1;startArrow=none;endArrow=block;endSize=2;strokeWidth=2.5;startSize=2;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;curveGeometry=1;" target="3--UwDYoeb955-La7nmg-149">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="664" y="653" />
+                <mxPoint x="664" y="656" />
+                <mxPoint x="684" y="656" />
+                <mxPoint x="718" y="656" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="VBAT/2 (≤ 2.1 V)" mermaidId="e:Div-&gt;P_GPIO3#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.49;targetPerimeterSpacing=4;" mermaidBaseValue="VBAT/2 (≤ 2.1 V)" id="3--UwDYoeb955-La7nmg-163">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-155" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.49;targetPerimeterSpacing=4;strokeWidth=2;" target="3--UwDYoeb955-La7nmg-150">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="664" y="943" />
+                <mxPoint x="664" y="960" />
+                <mxPoint x="684" y="960" />
+                <mxPoint x="718" y="960" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="OUT activo alto&#10;(Wake-up + validación 50 ms)" mermaidId="e:Sensor-&gt;P_GPIO0#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="OUT activo alto&#10;(Wake-up + validación 50 ms)" id="3--UwDYoeb955-La7nmg-164">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-154" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" target="3--UwDYoeb955-La7nmg-151">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="220 Ω (IF ≈ 9.5 mA)" mermaidId="e:P_GPIO1-&gt;Opto#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="220 Ω (IF ≈ 9.5 mA)" id="3--UwDYoeb955-La7nmg-165">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-146" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.5;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" target="3--UwDYoeb955-La7nmg-156">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="969" y="300" />
+                <mxPoint x="1003" y="300" />
+                <mxPoint x="1023" y="300" />
+                <mxPoint x="1023" y="299" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="330 Ω (≈ 3.9 mA)" mermaidId="e:P_GPIO2-&gt;LED#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#0f172a;html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.49;entryX=0;entryY=0.5;targetPerimeterSpacing=4;" mermaidBaseValue="330 Ω (≈ 3.9 mA)" id="3--UwDYoeb955-La7nmg-166">
+          <mxCell edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-147" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.49;entryX=0;entryY=0.5;targetPerimeterSpacing=4;fillColor=light-dark(transparent,#000000);" target="3--UwDYoeb955-La7nmg-158">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="969" y="447" />
+                <mxPoint x="1003" y="447" />
+                <mxPoint x="1023" y="447" />
+                <mxPoint x="1023" y="448" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+      <mxCell id="v2-ldo-ttp" value="3.3 V" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;strokeColor=light-dark(#0F172A,#1A1A1A);html=1;fontSize=14;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeWidth=2;" edge="1" parent="3--UwDYoeb955-La7nmg-143" source="3--UwDYoeb955-La7nmg-153" target="3--UwDYoeb955-La7nmg-154"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="v2-barrier" value="" style="html=1;shape=line;direction=south;dashed=1;dashPattern=4 3;strokeWidth=3;strokeColor=#DC2626;fillColor=none;" vertex="1" parent="3--UwDYoeb955-La7nmg-143"><mxGeometry x="1274" y="205" width="20" height="190" as="geometry" /></mxCell><mxCell id="v2-barrier-lbl" value="&lt;b&gt;Barrera de aislamiento&lt;/b&gt;&lt;br&gt;≥ 1500 VAC (NF-01)&lt;br&gt;creepage ≥ 6 mm · ranura bajo el PC817&lt;br&gt;sin GND común con el citófono" style="text;html=1;align=center;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#DC2626;fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;" vertex="1" parent="3--UwDYoeb955-La7nmg-143"><mxGeometry x="1150" y="115" width="270" height="85" as="geometry" /></mxCell><mxCell id="v2-mcu-support" value="&lt;b&gt;Circuito de soporte ESP32-C3&lt;/b&gt;&lt;br&gt;EN: RC 10 kΩ + 1 µF · BOOT: GPIO9 (pulsador)&lt;br&gt;USB nativo: GPIO18/19 (programación)&lt;br&gt;Strapping: pull-up 10 kΩ en GPIO2, GPIO8 y GPIO9&lt;br&gt;Antena al borde de la PCB + keep-out sin cobre&lt;br&gt;Test points: 3V3, VBAT, GND, GPIO0, GPIO1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#EFF6FF,#CCE5FF);strokeColor=#2563EB;fontColor=light-dark(#0F172A,#1A1A1A);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=13;align=left;spacingLeft=8;" vertex="1" parent="3--UwDYoeb955-La7nmg-143"><mxGeometry x="700" y="1080" width="299" height="150" as="geometry" /></mxCell><mxCell id="v2-fw-notes" value="&lt;b&gt;Notas de firmware&lt;/b&gt;&lt;br&gt;• gpio_hold_en(GPIO1) en nivel bajo antes de Deep Sleep&lt;br&gt;• Validar 50 ms contando desde el wake-up (no desde app_main)&lt;br&gt;• CONFIG_BOOTLOADER_SKIP_VALIDATE_IN_DEEP_SLEEP=y&lt;br&gt;• Bloqueo de 3–5 s y esperar liberación antes de rearmar el wake-up" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#F8FAFC,#E0E0E0);strokeColor=#94A3B8;dashed=1;fontColor=light-dark(#0F172A,#1A1A1A);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=12;align=left;spacingLeft=8;" vertex="1" parent="3--UwDYoeb955-La7nmg-143"><mxGeometry x="1180" y="640" width="380" height="130" as="geometry" /></mxCell></root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
